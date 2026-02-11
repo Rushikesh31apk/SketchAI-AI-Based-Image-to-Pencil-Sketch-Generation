@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SketchAI - Turn Your Photos into Pencil Art</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .hero-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+}
+
+/* Outer card */
+.image-card {
+    width: 280px;
+    height: 360px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 22px;
+    padding: 18px;
+    position: relative;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+}
+
+/* BEFORE / AFTER pill */
+.card-label {
+    position: absolute;
+    top: -44px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #7f8cff, #9b6dff);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 6px 18px;
+    border-radius: 999px;
+    letter-spacing: 1px;
+    z-index: 5;
+}
+
+/* Dashed inner container */
+.placeholder-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    border: 2px dashed rgba(255, 255, 255, 0.35);
+    padding: 5px;
+}
+
+/* IMAGE ITSELF */
+.placeholder-image img {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    object-fit: cover;        /* 🔥 key for perfect fit */
+    object-position: center;
+    display: block;
+}
+
+/* Sketch styling */
+.placeholder-image.sketch img {
+    filter: grayscale(100%) contrast(1.15);
+}
+
+/* Arrow */
+.arrow-indicator {
+    font-size: 34px;
+    color: #6fa8ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hover animation (optional but 🔥) */
+.image-card {
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.image-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+}
+
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-pencil-alt"></i> SketchAI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('index') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#how-it-works">How It Works</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-upload-nav" href="{{ url_for('upload') }}">Upload Image</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-background"></div>
+        <div class="container">
+            <div class="row align-items-center min-vh-100">
+                <div class="col-lg-6 hero-content">
+                    <div class="badge-pill mb-3">
+                        <i class="fas fa-magic"></i> AI-Powered Technology
+                    </div>
+                    <h1 class="hero-title">
+                        Turn Your Photos into 
+                        <span class="highlight">Pencil Art</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Transform any image into a stunning pencil sketch using advanced AI and computer vision. 
+                        Fast, secure, and beautifully realistic.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="{{ url_for('upload') }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-upload"></i> Upload Image
+                        </a>
+                        <a href="{{ url_for('how_it_works') }}" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-play-circle"></i> Learn More
+                        </a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">10K+</div>
+                            <div class="stat-label">Images Processed</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">&lt;5s</div>
+                            <div class="stat-label">Processing Time</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">100%</div>
+                            <div class="stat-label">Secure & Private</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-image">
+                        <div class="image-card">
+                            <div class="card-label">Before</div>
+                            <div class="placeholder-image original">
+                                <img src="../static/img/before.jpeg" alt="Your Photo Here" class="img-fluid">
+                            </div>
+                        </div>
+                        <div class="arrow-indicator">
+                            <i class="fas fa-long-arrow-alt-right"></i>
+                        </div>
+                        <div class="image-card">
+                            <div class="card-label">After</div>
+                            <div class="placeholder-image sketch">
+                                <img src="../static/img/after.png" alt="Pencil Sketch" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating Elements -->
+        <div class="floating-element element-1">
+            <i class="fas fa-pencil-alt"></i>
+        </div>
+        <div class="floating-element element-2">
+            <i class="fas fa-paint-brush"></i>
+        </div>
+        <div class="floating-element element-3">
+            <i class="fas fa-palette"></i>
+        </div>
+    </section>
+<!-- Page Header -->
+    <section id ="features" class="page-header">
+        <div class="container">
+            <h1 class="page-title">Powerful Features</h1>
+            <p class="page-subtitle">Everything you need to create stunning pencil sketches</p>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <div class="row g-4">
+                <!-- Feature 1 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="feature-card-title">AI-Powered Processing</h3>
+                        <p class="feature-card-description">
+                            Advanced computer vision algorithms powered by OpenCV deliver realistic pencil sketch effects 
+                            that capture every detail of your original image.
+                        </p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Intelligent edge detection</li>
+                            <li><i class="fas fa-check"></i> Natural shading effects</li>
+                            <li><i class="fas fa-check"></i> Preserves fine details</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <h3 class="feature-card-title">Lightning Fast Processing</h3>
+                        <p class="feature-card-description">
+                            Get your pencil sketch in seconds, not minutes. Our optimized processing pipeline 
+                            ensures quick turnaround without compromising quality.
+                        </p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Sub-5 second processing</li>
+                            <li><i class="fas fa-check"></i> Real-time preview</li>
+                            <li><i class="fas fa-check"></i> Instant download</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="feature-card-title">100% Secure & Private</h3>
+                        <p class="feature-card-description">
+                            Your images are processed securely with enterprise-grade protection. We never store 
+                            your data longer than necessary and respect your privacy.
+                        </p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Encrypted file transfer</li>
+                            <li><i class="fas fa-check"></i> Automatic data cleanup</li>
+                            <li><i class="fas fa-check"></i> No third-party sharing</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <h3 class="feature-card-title">Universal Format Support</h3>
+                        <p class="feature-card-description">
+                            Works with all common image formats. Upload PNG, JPEG, BMP, TIFF, or WebP files 
+                            and get perfect results every time.
+                        </p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> PNG, JPG, JPEG support</li>
+                            <li><i class="fas fa-check"></i> BMP & TIFF compatible</li>
+                            <li><i class="fas fa-check"></i> WebP format ready</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fas fa-sliders-h"></i>
+                        </div>
+                        <h3 class="feature-card-title">Optimized Algorithm</h3>
+                        <p class="feature-card-description">
+                            Multi-step processing pipeline including grayscale conversion, image inversion, 
+                            Gaussian blur, and sophisticated blending for professional results.
+                        </p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Grayscale conversion</li>
+                            <li><i class="fas fa-check"></i> Gaussian blur blending</li>
+                            <li><i class="fas fa-check"></i> Edge enhancement</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3 class="feature-card-title">Responsive Design</h3>
+                        <p class="feature-card-description">
+                            Perfect experience on any device - desktop, tablet, or mobile. Upload and download 
+                            your sketches seamlessly from anywhere.
+                        </p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Mobile-optimized UI</li>
+                            <li><i class="fas fa-check"></i> Touch-friendly interface</li>
+                            <li><i class="fas fa-check"></i> Cross-browser compatible</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 7 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <h3 class="feature-card-title">Instant Download</h3>
+                        <p class="feature-card-description">
+                            Download your pencil sketch immediately after processing. High-quality PNG output 
+                            ready for printing, sharing, or further editing.
+                        </p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> One-click download</li>
+                            <li><i class="fas fa-check"></i> High-resolution output</li>
+                            <li><i class="fas fa-check"></i> Print-ready quality</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 8 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3 class="feature-card-title">No Registration Required</h3>
+                        <p class="feature-card-description">
+                            Start creating sketches immediately. No sign-up, no email required, no hidden fees. 
+                            Just upload and transform - it's that simple.
+                        </p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> No account needed</li>
+                            <li><i class="fas fa-check"></i> Completely free to use</li>
+                            <li><i class="fas fa-check"></i> No watermarks</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 9 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <h3 class="feature-card-title">Professional Quality</h3>
+                        <p class="feature-card-description">
+                            Studio-grade results suitable for art projects, gifts, social media, or professional 
+                            portfolios. Every sketch is carefully processed for maximum impact.
+                        </p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Gallery-worthy output</li>
+                            <li><i class="fas fa-check"></i> Consistent results</li>
+                            <li><i class="fas fa-check"></i> Professional finishing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+     <!-- Page Header -->
+    <section id="how-it-works" class="page-header">
+        <div class="container">
+            <h1 class="page-title">How It Works</h1>
+            <p class="page-subtitle">Understanding the AI-powered pencil sketch generation process</p>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process-section">
+        <div class="container">
+            <!-- User Steps -->
+            <div class="section-header text-center mb-5">
+                <h2 class="section-title">Simple 3-Step Process</h2>
+                <p class="section-subtitle">Get your pencil sketch in seconds</p>
+            </div>
+
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="process-card">
+                        <div class="process-number">1</div>
+                        <div class="process-icon">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                        <h3 class="process-title">Upload Your Image</h3>
+                        <p class="process-description">
+                            Select any photo from your device. We support PNG, JPG, JPEG, BMP, TIFF, and WebP formats 
+                            up to 16MB in size.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="process-card">
+                        <div class="process-number">2</div>
+                        <div class="process-icon">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <h3 class="process-title">AI Processing</h3>
+                        <p class="process-description">
+                            Our advanced OpenCV algorithms analyze your image and apply sophisticated transformations 
+                            to create a realistic pencil sketch effect.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="process-card">
+                        <div class="process-number">3</div>
+                        <div class="process-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <h3 class="process-title">Download & Share</h3>
+                        <p class="process-description">
+                            View your beautiful pencil sketch side-by-side with the original. Download the high-quality 
+                            result and share it anywhere you like.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Process -->
+            <div class="section-header text-center mb-5 mt-5">
+                <h2 class="section-title">The Technology Behind the Magic</h2>
+                <p class="section-subtitle">Advanced computer vision algorithms at work</p>
+            </div>
+
+            <div class="technical-process">
+                <div class="tech-step">
+                    <div class="tech-step-content">
+                        <div class="tech-step-number">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <div class="tech-step-info">
+                            <h4 class="tech-step-title">Step 1: Image Loading</h4>
+                            <p class="tech-step-description">
+                                The uploaded image is securely loaded into memory using OpenCV's cv2.imread() function. 
+                                This creates a multi-dimensional numpy array representing the RGB pixel values of your image.
+                            </p>
+                            <div class="tech-code">
+                                <code>img = cv2.imread(image_path)</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-step">
+                    <div class="tech-step-content">
+                        <div class="tech-step-number">
+                            <i class="fas fa-adjust"></i>
+                        </div>
+                        <div class="tech-step-info">
+                            <h4 class="tech-step-title">Step 2: Grayscale Conversion</h4>
+                            <p class="tech-step-description">
+                                The color image is converted to grayscale, reducing the three color channels (RGB) to a 
+                                single intensity channel. This simplifies the image and provides the foundation for sketch conversion.
+                            </p>
+                            <div class="tech-code">
+                                <code>gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-step">
+                    <div class="tech-step-content">
+                        <div class="tech-step-number">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="tech-step-info">
+                            <h4 class="tech-step-title">Step 3: Image Inversion</h4>
+                            <p class="tech-step-description">
+                                The grayscale image is inverted by subtracting each pixel value from 255. This creates a 
+                                negative of the image, which is essential for the next blending step.
+                            </p>
+                            <div class="tech-code">
+                                <code>inverted_img = 255 - gray_img</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-step">
+                    <div class="tech-step-content">
+                        <div class="tech-step-number">
+                            <i class="fas fa-blur"></i>
+                        </div>
+                        <div class="tech-step-info">
+                            <h4 class="tech-step-title">Step 4: Gaussian Blur</h4>
+                            <p class="tech-step-description">
+                                A Gaussian blur is applied to the inverted image using a 21x21 kernel. This softens the 
+                                edges and creates the smooth shading characteristic of pencil drawings. The blur radius 
+                                determines the "stroke thickness" of the final sketch.
+                            </p>
+                            <div class="tech-code">
+                                <code>blurred = cv2.GaussianBlur(inverted_img, (21, 21), 0)</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-step">
+                    <div class="tech-step-content">
+                        <div class="tech-step-number">
+                            <i class="fas fa-undo"></i>
+                        </div>
+                        <div class="tech-step-info">
+                            <h4 class="tech-step-title">Step 5: Blur Inversion</h4>
+                            <p class="tech-step-description">
+                                The blurred image is inverted back to positive values. This prepares it for the critical 
+                                division operation that creates the pencil sketch effect.
+                            </p>
+                            <div class="tech-code">
+                                <code>inverted_blurred = 255 - blurred</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-step">
+                    <div class="tech-step-content">
+                        <div class="tech-step-number">
+                            <i class="fas fa-divide"></i>
+                        </div>
+                        <div class="tech-step-info">
+                            <h4 class="tech-step-title">Step 6: Dodge & Burn Blending</h4>
+                            <p class="tech-step-description">
+                                The grayscale image is divided by the inverted blur, scaled by 256. This color dodge 
+                                blending technique mimics how light interacts with pencil on paper, creating realistic 
+                                highlights and shadows. Dark areas become darker (pencil strokes), while light areas remain bright (paper).
+                            </p>
+                            <div class="tech-code">
+                                <code>sketch = cv2.divide(gray_img, inverted_blurred, scale=256.0)</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-step">
+                    <div class="tech-step-content">
+                        <div class="tech-step-number">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <div class="tech-step-info">
+                            <h4 class="tech-step-title">Step 7: Edge Enhancement</h4>
+                            <p class="tech-step-description">
+                                An optional sharpening filter is applied to enhance edges and add fine details. This 
+                                uses a custom kernel that emphasizes contrast at edges, making the sketch lines crisper 
+                                and more defined.
+                            </p>
+                            <div class="tech-code">
+                                <code>kernel = [[-1,-1,-1], [-1,9,-1], [-1,-1,-1]]<br>
+                                enhanced = cv2.filter2D(sketch, -1, kernel)</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-step">
+                    <div class="tech-step-content">
+                        <div class="tech-step-number">
+                            <i class="fas fa-save"></i>
+                        </div>
+                        <div class="tech-step-info">
+                            <h4 class="tech-step-title">Step 8: Save & Deliver</h4>
+                            <p class="tech-step-description">
+                                The final pencil sketch is saved as a high-quality PNG file and made available for 
+                                download. The result preserves all the fine details while creating a stunning artistic effect.
+                            </p>
+                            <div class="tech-code">
+                                <code>cv2.imwrite(output_path, pencil_sketch)</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why It Works Section -->
+    <section class="why-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h2 class="section-title">Why This Algorithm Works</h2>
+                    <p class="section-text">
+                        The pencil sketch effect is achieved through a clever application of the <strong>color dodge</strong> 
+                        blending mode, commonly used in digital art software like Photoshop.
+                    </p>
+                    <p class="section-text">
+                        When you divide a grayscale image by its inverted and blurred version, you create an effect where:
+                    </p>
+                    <ul class="benefit-list">
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <strong>Edges are preserved:</strong> Sharp transitions in the original image become 
+                            distinct lines in the sketch
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <strong>Shadows are enhanced:</strong> Dark areas get darker, mimicking pencil pressure
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <strong>Highlights remain bright:</strong> Light areas stay white like untouched paper
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <strong>Texture is created:</strong> The blur creates smooth gradients similar to pencil shading
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-6">
+                    <div class="algorithm-visual">
+                        <div class="visual-box">
+                            <h4><i class="fas fa-image"></i> Original</h4>
+                            <p>Full color image</p>
+                        </div>
+                        <div class="arrow-down"><i class="fas fa-arrow-down"></i></div>
+                        <div class="visual-box">
+                            <h4><i class="fas fa-adjust"></i> Grayscale</h4>
+                            <p>Single intensity channel</p>
+                        </div>
+                        <div class="arrow-down"><i class="fas fa-arrow-down"></i></div>
+                        <div class="visual-box">
+                            <h4><i class="fas fa-blur"></i> Blur & Blend</h4>
+                            <p>Color dodge operation</p>
+                        </div>
+                        <div class="arrow-down"><i class="fas fa-arrow-down"></i></div>
+                        <div class="visual-box highlight-box">
+                            <h4><i class="fas fa-pencil-alt"></i> Pencil Sketch</h4>
+                            <p>Final artistic result</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to Create Amazing Sketches?</h2>
+                <p class="cta-subtitle">Upload your first image and see the magic happen</p>
+                <a href="{{ url_for('upload') }}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-upload"></i> Start Creating Now
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 SketchAI. Built with <i class="fas fa-heart"></i> using AI & Computer Vision.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features - SketchAI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-pencil-alt"></i> SketchAI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('features') }}">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('how_it_works') }}">How It Works</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-upload-nav" href="{{ url_for('upload') }}">Upload Image</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">Powerful Features</h1>
+            <p class="page-subtitle">Everything you need to create stunning pencil sketches</p>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <div class="row g-4">
+                <!-- Feature 1 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="feature-card-title">AI-Powered Processing</h3>
+                        <p class="feature-card-description">
+                            Advanced computer vision algorithms powered by OpenCV deliver realistic pencil sketch effects 
+                            that capture every detail of your original image.
+                        </p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Intelligent edge detection</li>
+                            <li><i class="fas fa-check"></i> Natural shading effects</li>
+                            <li><i class="fas fa-check"></i> Preserves fine details</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <h3 class="feature-card-title">Lightning Fast Processing</h3>
+                        <p class="feature-card-description">
+                            Get your pencil sketch in seconds, not minutes. Our optimized processing pipeline 
+                            ensures quick turnaround without compromising quality.
+                        </p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Sub-5 second processing</li>
+                            <li><i class="fas fa-check"></i> Real-time preview</li>
+                            <li><i class="fas fa-check"></i> Instant download</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="feature-card-title">100% Secure & Private</h3>
+                        <p class="feature-card-description">
+                            Your images are processed securely with enterprise-grade protection. We never store 
+                            your data longer than necessary and respect your privacy.
+                        </p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Encrypted file transfer</li>
+                            <li><i class="fas fa-check"></i> Automatic data cleanup</li>
+                            <li><i class="fas fa-check"></i> No third-party sharing</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <h3 class="feature-card-title">Universal Format Support</h3>
+                        <p class="feature-card-description">
+                            Works with all common image formats. Upload PNG, JPEG, BMP, TIFF, or WebP files 
+                            and get perfect results every time.
+                        </p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> PNG, JPG, JPEG support</li>
+                            <li><i class="fas fa-check"></i> BMP & TIFF compatible</li>
+                            <li><i class="fas fa-check"></i> WebP format ready</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fas fa-sliders-h"></i>
+                        </div>
+                        <h3 class="feature-card-title">Optimized Algorithm</h3>
+                        <p class="feature-card-description">
+                            Multi-step processing pipeline including grayscale conversion, image inversion, 
+                            Gaussian blur, and sophisticated blending for professional results.
+                        </p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Grayscale conversion</li>
+                            <li><i class="fas fa-check"></i> Gaussian blur blending</li>
+                            <li><i class="fas fa-check"></i> Edge enhancement</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3 class="feature-card-title">Responsive Design</h3>
+                        <p class="feature-card-description">
+                            Perfect experience on any device - desktop, tablet, or mobile. Upload and download 
+                            your sketches seamlessly from anywhere.
+                        </p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Mobile-optimized UI</li>
+                            <li><i class="fas fa-check"></i> Touch-friendly interface</li>
+                            <li><i class="fas fa-check"></i> Cross-browser compatible</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 7 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <h3 class="feature-card-title">Instant Download</h3>
+                        <p class="feature-card-description">
+                            Download your pencil sketch immediately after processing. High-quality PNG output 
+                            ready for printing, sharing, or further editing.
+                        </p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> One-click download</li>
+                            <li><i class="fas fa-check"></i> High-resolution output</li>
+                            <li><i class="fas fa-check"></i> Print-ready quality</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 8 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3 class="feature-card-title">No Registration Required</h3>
+                        <p class="feature-card-description">
+                            Start creating sketches immediately. No sign-up, no email required, no hidden fees. 
+                            Just upload and transform - it's that simple.
+                        </p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> No account needed</li>
+                            <li><i class="fas fa-check"></i> Completely free to use</li>
+                            <li><i class="fas fa-check"></i> No watermarks</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Feature 9 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <h3 class="feature-card-title">Professional Quality</h3>
+                        <p class="feature-card-description">
+                            Studio-grade results suitable for art projects, gifts, social media, or professional 
+                            portfolios. Every sketch is carefully processed for maximum impact.
+                        </p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Gallery-worthy output</li>
+                            <li><i class="fas fa-check"></i> Consistent results</li>
+                            <li><i class="fas fa-check"></i> Professional finishing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to Create Amazing Sketches?</h2>
+                <p class="cta-subtitle">Upload your first image and see the magic happen</p>
+                <a href="{{ url_for('upload') }}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-upload"></i> Start Creating Now
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="footer-brand">
+                        <i class="fas fa-pencil-alt"></i> SketchAI
+                    </div>
+                    <p class="footer-description">
+                        Transform your memories into beautiful pencil sketches using cutting-edge AI technology.
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="footer-title">Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('index') }}">Home</a></li>
+                        <li><a href="{{ url_for('features') }}">Features</a></li>
+                        <li><a href="{{ url_for('how_it_works') }}">How It Works</a></li>
+                        <li><a href="{{ url_for('upload') }}">Upload</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="footer-title">Technology</h5>
+                    <ul class="footer-links">
+                        <li><i class="fab fa-python"></i> Python Flask</li>
+                        <li><i class="fas fa-brain"></i> OpenCV</li>
+                        <li><i class="fab fa-bootstrap"></i> Bootstrap 5</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 SketchAI. Built with <i class="fas fa-heart"></i> using AI & Computer Vision.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

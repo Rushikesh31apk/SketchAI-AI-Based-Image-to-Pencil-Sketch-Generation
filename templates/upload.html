@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Image - SketchAI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-pencil-alt"></i> SketchAI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('features') }}">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('how_it_works') }}">How It Works</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active btn-upload-nav" href="{{ url_for('upload') }}">Upload Image</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Upload Section -->
+    <section class="upload-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="upload-container">
+                        <div class="upload-header text-center">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <h1 class="upload-title">Upload Your Image</h1>
+                            <p class="upload-subtitle">
+                                Choose a photo to transform into a beautiful pencil sketch
+                            </p>
+                        </div>
+
+                        <!-- Flash Messages -->
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                                        <i class="fas fa-{{ 'exclamation-circle' if category == 'error' else 'info-circle' }}"></i>
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+
+                        <!-- Upload Form -->
+                        <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                            <div class="upload-area" id="uploadArea">
+                                <input type="file" name="file" id="fileInput" accept="image/*" required>
+                                <div class="upload-placeholder" id="uploadPlaceholder">
+                                    <i class="fas fa-image"></i>
+                                    <h3>Drag & Drop Your Image Here</h3>
+                                    <p>or click to browse</p>
+                                    <span class="upload-formats">
+                                        Supported formats: PNG, JPG, JPEG, BMP, TIFF, WebP (max 16MB)
+                                    </span>
+                                </div>
+                                <div class="upload-preview" id="uploadPreview" style="display: none;">
+                                    <img id="previewImage" src="" alt="Preview">
+                                    <div class="preview-info">
+                                        <span id="fileName"></span>
+                                        <button type="button" class="btn-remove" id="removeFile">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="upload-actions">
+                                <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                                    <i class="fas fa-magic"></i> Generate Sketch
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Loading Overlay -->
+                        <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+                            <div class="loading-content">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <h3>Processing Your Image...</h3>
+                                <p>Creating your pencil sketch with AI</p>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                         role="progressbar" style="width: 100%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tips Section -->
+                    <div class="tips-section">
+                        <h4><i class="fas fa-lightbulb"></i> Tips for Best Results</h4>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="tip-card">
+                                    <i class="fas fa-check-circle"></i>
+                                    <p><strong>Use high-quality images</strong> with clear subjects for best sketch detail</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="tip-card">
+                                    <i class="fas fa-check-circle"></i>
+                                    <p><strong>Photos with good contrast</strong> produce more dramatic sketches</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="tip-card">
+                                    <i class="fas fa-check-circle"></i>
+                                    <p><strong>Portraits work great</strong> - faces are captured beautifully</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="tip-card">
+                                    <i class="fas fa-check-circle"></i>
+                                    <p><strong>Landscapes and buildings</strong> create stunning artistic effects</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="footer-brand">
+                        <i class="fas fa-pencil-alt"></i> SketchAI
+                    </div>
+                    <p class="footer-description">
+                        Transform your memories into beautiful pencil sketches using cutting-edge AI technology.
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="footer-title">Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('index') }}">Home</a></li>
+                        <li><a href="{{ url_for('features') }}">Features</a></li>
+                        <li><a href="{{ url_for('how_it_works') }}">How It Works</a></li>
+                        <li><a href="{{ url_for('upload') }}">Upload</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="footer-title">Technology</h5>
+                    <ul class="footer-links">
+                        <li><i class="fab fa-python"></i> Python Flask</li>
+                        <li><i class="fas fa-brain"></i> OpenCV</li>
+                        <li><i class="fab fa-bootstrap"></i> Bootstrap 5</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 SketchAI. Built with <i class="fas fa-heart"></i> using AI & Computer Vision.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
