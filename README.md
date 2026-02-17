@@ -12,7 +12,7 @@ A production-ready web application that transforms your photos into stunning pen
 ## 📋 Website Screenshots
 
 - Home Page
-![Home](image1.png)
+![Home](image.png)
 
 - Features
 ![features](image2.png)
