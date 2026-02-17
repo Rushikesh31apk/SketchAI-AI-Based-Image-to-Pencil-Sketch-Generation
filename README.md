@@ -9,19 +9,25 @@ A production-ready web application that transforms your photos into stunning pen
 
 ---
 
-## 📋 Table of Contents
+## 📋 Website Screenshots
 
-- [Features](#-features)
-- [Technology Stack](#-technology-stack)
-- [How It Works](#-how-it-works)
-- [Project Structure](#-project-structure)
-- [Installation](#-installation)
-- [Usage](#-usage)
-- [API Endpoints](#-api-endpoints)
-- [Algorithm Explained](#-algorithm-explained)
-- [Screenshots](#-screenshots)
-- [Contributing](#-contributing)
-- [License](#-license)
+- Home Page
+![Home](image1.png)
+
+- Features
+![features](image2.png)
+
+- How it works
+![process](image3.png)
+
+- Algorithm
+![Algorithm](image4.png)
+
+- Output
+![Output](image5.png)
+
+- Sharing Options
+![Options](image6.png)
 
 ---
 
